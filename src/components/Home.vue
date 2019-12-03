@@ -51,15 +51,15 @@
             </div>
         </form>
         <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 d-flex align-items-stretch col-md-6">
                 <div class="card text-white bg-greeny mb-3 w-100">
                     <div class="card-header">Текущий балл</div>
-                    <div class="card-body">
-                        <h2 class="card-title">{{ average }}</h2>
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <h1 class="card-title">{{ average }}</h1>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 d-flex align-items-stretch col-md-6">
                 <div class="card text-white bg-greeny mb-3 w-100">
                     <div class="card-header">До требуемого балла ({{need}})</div>
                     <div class="card-body">
