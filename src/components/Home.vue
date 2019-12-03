@@ -16,7 +16,7 @@
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Двойки</span>
                     </div>
                     <input type="number" v-model="marks.two" @change="computeMarks" aria-label="Количество двоек"
-                           min="0" value="0"
+                           min="0" max="100" value="0"
                            class="form-control">
                 </div>
                 <div class="input-group">
@@ -24,7 +24,7 @@
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Тройки</span>
                     </div>
                     <input type="number" v-model="marks.three" @change="computeMarks" aria-label="Количество троек"
-                           min="0" value="0"
+                           min="0" max="100" value="0"
                            class="form-control">
                 </div>
                 <div class="input-group">
@@ -32,7 +32,7 @@
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Четвёрки</span>
                     </div>
                     <input type="number" v-model="marks.four" @change="computeMarks" aria-label="Количество четверок"
-                           min="0" value="0"
+                           min="0" max="100" value="0"
                            class="form-control">
                 </div>
                 <div class="input-group">
@@ -40,7 +40,7 @@
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Пятёрки</span>
                     </div>
                     <input type="number" v-model="marks.five" @change="computeMarks" aria-label="Количество пятерок"
-                           min="0" value="0"
+                           min="0" max="100" value="0"
                            class="form-control">
                 </div>
             </div>
@@ -55,7 +55,7 @@
                 <div class="card text-white bg-greeny mb-3 w-100">
                     <div class="card-header">Текущий балл</div>
                     <div class="card-body">
-                        <h2 class="card-title">4.50</h2>
+                        <h2 class="card-title">{{ average }}</h2>
                     </div>
                 </div>
             </div>
@@ -97,6 +97,7 @@
                     this.need = 5;
                 else if (val < 0)
                     this.need = 0;
+                this.need = Math.round(this.need * 100) / 100;
             },
             markstring: function (val) {
                 this.markarr = val.replace(/\t/g, '').replace(/\s\s+/g, '').replace(/[^2-5]/g, '').split('').map(val => {
@@ -133,12 +134,34 @@
         },
         methods: {
             computeMarks: function () {
+                if (this.marks.two > 100)
+                    this.marks.two = 100;
+                if (this.marks.three > 100)
+                    this.marks.three = 100;
+                if (this.marks.four > 100)
+                    this.marks.four = 100;
+                if (this.marks.five > 100)
+                    this.marks.five = 100;
+                if (this.marks.two < 0)
+                    this.marks.two = 0;
+                if (this.marks.three < 0)
+                    this.marks.three = 0;
+                if (this.marks.four < 0)
+                    this.marks.four = 0;
+                if (this.marks.five < 0)
+                    this.marks.five = 0;
                 this.markarr = [];
                 this.markarr.push(new Array(parseInt(this.marks.two)).fill(2));
                 this.markarr.push(new Array(parseInt(this.marks.three)).fill(3));
                 this.markarr.push(new Array(parseInt(this.marks.four)).fill(4));
                 this.markarr.push(new Array(parseInt(this.marks.five)).fill(5));
                 this.markstring = this.markarr.join(' ');
+            }
+        },
+        computed: {
+            average: function () {
+                let temp = this.summ / this.markarr.length;
+                return temp ? temp.toFixed(2) : '-';
             }
         }
     }
