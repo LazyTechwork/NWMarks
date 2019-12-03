@@ -6,7 +6,8 @@
         <form action="/">
             <div class="form-group">
                 <label for="marks">Оценки</label>
-                <input id="marks" v-model="markstring" type="text" placeholder="Введите здесь свои оценки через пробел" class="form-control">
+                <input id="marks" v-model="markstring" type="text" placeholder="Введите здесь свои оценки"
+                       class="form-control">
             </div>
             <div class="form-group">
                 <p>Обработанные оценки</p>
@@ -14,26 +15,32 @@
                     <div class="input-group-prepend w-50">
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Двойки</span>
                     </div>
-                    <input type="number" aria-label="Количество двоек" min="0" value="0" class="form-control">
+                    <input type="number" v-model="marks.two" @change="computeMarks" aria-label="Количество двоек"
+                           min="0" value="0"
+                           class="form-control">
                 </div>
                 <div class="input-group">
                     <div class="input-group-prepend w-50">
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Тройки</span>
                     </div>
-                    <input type="number" aria-label="Количество троек" min="0" value="0" class="form-control">
+                    <input type="number" v-model="marks.three" @change="computeMarks" aria-label="Количество троек"
+                           min="0" value="0"
+                           class="form-control">
                 </div>
                 <div class="input-group">
                     <div class="input-group-prepend w-50">
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Четвёрки</span>
                     </div>
-                    <input type="number" aria-label="Количество четверок" min="0" value="0"
+                    <input type="number" v-model="marks.four" @change="computeMarks" aria-label="Количество четверок"
+                           min="0" value="0"
                            class="form-control">
                 </div>
                 <div class="input-group">
                     <div class="input-group-prepend w-50">
                         <span class="input-group-text w-100 bg-greeny text-white border-0">Пятёрки</span>
                     </div>
-                    <input type="number" aria-label="Количество пятерок" min="0" value="0"
+                    <input type="number" v-model="marks.five" @change="computeMarks" aria-label="Количество пятерок"
+                           min="0" value="0"
                            class="form-control">
                 </div>
             </div>
@@ -74,6 +81,14 @@
             return {
                 need: 3.50,
                 markstring: '',
+                marks: {
+                    two: 0,
+                    three: 0,
+                    four: 0,
+                    five: 0,
+                },
+                markarr: [],
+                summ: 0,
             }
         },
         watch: {
@@ -83,8 +98,46 @@
                 else if (val < 0)
                     this.need = 0;
             },
-            markstring: function () {
-
+            markstring: function (val) {
+                this.markarr = val.replace(/\t/g, '').replace(/\s\s+/g, '').replace(/[^2-5]/g, '').split('').map(val => {
+                    return parseInt(val)
+                });
+                this.markstring = this.markarr.join(' ');
+                this.marks = {
+                    two: 0,
+                    three: 0,
+                    four: 0,
+                    five: 0,
+                };
+                this.markarr.forEach((value) => {
+                    switch (value) {
+                        case 2:
+                            this.marks.two++;
+                            break;
+                        case 3:
+                            this.marks.three++;
+                            break;
+                        case 4:
+                            this.marks.four++;
+                            break;
+                        case 5:
+                            this.marks.five++;
+                            break;
+                        default:
+                            break;
+                    }
+                    this.summ += value;
+                });
+            }
+        },
+        methods: {
+            computeMarks: function () {
+                this.markarr = [];
+                this.markarr.push(new Array(parseInt(this.marks.two)).fill(2));
+                this.markarr.push(new Array(parseInt(this.marks.three)).fill(3));
+                this.markarr.push(new Array(parseInt(this.marks.four)).fill(4));
+                this.markarr.push(new Array(parseInt(this.marks.five)).fill(5));
+                this.markstring = this.markarr.join(' ');
             }
         }
     }
