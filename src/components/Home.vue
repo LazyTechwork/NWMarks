@@ -1,5 +1,5 @@
 <template>
-    <div class="container" style="flex: 1 0 auto;">
+    <div class="container mt-5" style="flex: 1 0 auto;">
         <div class="d-flex align-items-center justify-content-center py-5">
             <img src="../assets/logo.svg" alt="" class="img-fluid" style="max-width: 250px;">
         </div>
