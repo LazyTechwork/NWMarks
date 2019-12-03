@@ -109,6 +109,7 @@
                     four: 0,
                     five: 0,
                 };
+                this.summ = 0;
                 this.markarr.forEach((value) => {
                     switch (value) {
                         case 2:
