@@ -64,9 +64,10 @@
                     <div class="card-header">До требуемого балла ({{need}})</div>
                     <div class="card-body">
                         <p class="my-0">Требуется четвёрок</p>
-                        <h3 class="card-title">2</h3>
+                        <h3 class="card-title">{{ needed.four }} <span class="h5" v-if="needed.four && needed.four >= 0">{{ needFour }}</span>
+                        </h3>
                         <p class="my-0">Требуется пятёрок</p>
-                        <h3 class="card-title">1</h3>
+                        <h3 class="card-title">{{ needed.five }} <span class="h5" v-if="needed.five && needed.five >= 0">{{ needFive }}</span></h3>
                     </div>
                 </div>
             </div>
@@ -88,6 +89,10 @@
                     five: 0,
                 },
                 markarr: [],
+                needed: {
+                    four: 0,
+                    five: 0
+                },
                 summ: 0,
             }
         },
@@ -98,6 +103,7 @@
                 else if (val < 0)
                     this.need = 0;
                 this.need = Math.round(this.need * 100) / 100;
+                this.needanceProcess();
             },
             markstring: function (val) {
                 this.markarr = val.replace(/\t/g, '').replace(/\s\s+/g, '').replace(/[^2-5]/g, '').split('').map(val => {
@@ -130,9 +136,37 @@
                     }
                     this.summ += value;
                 });
+                this.needanceProcess();
             }
         },
         methods: {
+            needanceProcess: function () {
+                let temp = this.summ;
+                let need = this.need;
+                let needed = 0;
+                let marklen = this.markarr.length;
+                while (temp / (marklen + needed) < need) {
+                    temp += 4;
+                    needed++;
+                    if (needed > 100) {
+                        needed = -1;
+                        break;
+                    }
+                }
+                this.needed.four = needed >= 0 ? needed : '-';
+
+                temp = this.summ;
+                needed = 0;
+                while (temp / (marklen + needed) < need) {
+                    temp += 5;
+                    needed++;
+                    if (needed > 100) {
+                        needed = -1;
+                        break;
+                    }
+                }
+                this.needed.five = needed >= 0 ? needed : '-';
+            },
             computeMarks: function () {
                 if (this.marks.two > 100)
                     this.marks.two = 100;
@@ -156,12 +190,19 @@
                 this.markarr.push(new Array(parseInt(this.marks.four)).fill(4));
                 this.markarr.push(new Array(parseInt(this.marks.five)).fill(5));
                 this.markstring = this.markarr.join(' ');
+                this.needanceProcess();
             }
         },
         computed: {
             average: function () {
                 let temp = this.summ / this.markarr.length;
                 return temp ? temp.toFixed(2) : '-';
+            },
+            needFour: function () {
+                return ((this.summ + this.needed.four * 4) / (this.markarr.length + this.needed.four)).toFixed(2);
+            },
+            needFive: function () {
+                return ((this.summ + this.needed.five * 5) / (this.markarr.length + this.needed.five)).toFixed(2);
             }
         }
     }
