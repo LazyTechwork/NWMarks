@@ -64,10 +64,13 @@
                     <div class="card-header">До требуемого балла ({{need}})</div>
                     <div class="card-body">
                         <p class="my-0">Требуется четвёрок</p>
-                        <h3 class="card-title">{{ needed.four }} <span class="h5" v-if="needed.four && needed.four >= 0">{{ needFour }}</span>
+                        <h3 class="card-title">{{ needed.four }} <span class="h5"
+                                                                       v-if="needed.four && needed.four >= 0">{{ needFour }}</span>
                         </h3>
                         <p class="my-0">Требуется пятёрок</p>
-                        <h3 class="card-title">{{ needed.five }} <span class="h5" v-if="needed.five && needed.five >= 0">{{ needFive }}</span></h3>
+                        <h3 class="card-title">{{ needed.five }} <span class="h5"
+                                                                       v-if="needed.five && needed.five >= 0">{{ needFive }}</span>
+                        </h3>
                     </div>
                 </div>
             </div>
@@ -102,7 +105,8 @@
                     this.need = 5;
                 else if (val < 0)
                     this.need = 0;
-                this.need = Math.round(this.need * 100) / 100;
+                if (val.length > 4)
+                    this.need = Math.round(this.need * 100) / 100;
                 this.needanceProcess();
             },
             markstring: function (val) {
